@@ -163,8 +163,8 @@ Token Token_stream::get()
 		case '/':
 		case '%':
 		case '=':
-		case ',':
 		case '#':
+		case ',':
 			return Token(ch);
 		case '.':
 		case '0': case '1': case '2': case '3': case '4':
@@ -185,7 +185,7 @@ Token Token_stream::get()
     			cin.putback(ch);
     			if (s == declkey) return Token{let};
     			if(s == sqrtkey) return Token(sqrties);
-    			if (s==powdkey) return Token(powies);
+    			if(s == powdkey) return Token(powies);
     			if(s == quitkey) return Token(quit);
 
     			else if (is_declared(s))
@@ -269,7 +269,33 @@ double primary()
 		
 
 		case powies: 
-					return primary();
+		{
+
+			t = ts.get();
+			if (t.kind != '(') error("'(' expected");
+			double left =  expression();
+
+			t=ts.get();
+				if(t.kind != ','){ error("','expected");}
+				else{	
+					double right = expression();
+					if(right<0){ error('negativ number of secon numb in pow');}
+					else{
+			t = ts.get();
+			if (t.kind != ')'){
+				error("')' expected");}
+			
+			else{
+							 return	pow(f,d);
+			}
+		}
+
+				
+				}
+
+
+				
+						}	
 		
 
 		case sqrties:
@@ -375,30 +401,7 @@ double expression()
 				left -= term();
 				t = ts.get();
 				break;
-			case  ',':
-  {
-                double d=primary();
-                				int i1 ;
-            if(i1 = narrow_cast<int>(d)){
-
-
-                double d2=left;
-                left=pow(d2,d);
-                t=ts.get();
-                break;
-                }
-                else{
-                	error("Error negativ number in pow 2. numb");
-                }
-
-                }
-
-
-				default:
-				ts.putback(t);
-				return left;
-
-		}
+			
 	}
 }
 
